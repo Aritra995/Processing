@@ -1,14 +1,9 @@
 import processing.core.PApplet;
 
 public class TryProcessing extends PApplet {
-
-    public static final int WIDTH = 648;
-    public static final int HEIGHT = 488;
-    public static final int DIAMETER = 10;
-    public static final int numberOfBalls = 4;
-    public static final int startBallIndex = 1;
-    int x = 0;
-    double speedMultiplier = 1.0;
+    public static final int START_BALL_INDEX = Constants.startBallIndex;
+    private Shape[] balls;
+    private int numberOfBalls = Constants.numberOfBalls;
 
     public static void main(String[] args) {
         PApplet.main("TryProcessing", args);
@@ -17,32 +12,26 @@ public class TryProcessing extends PApplet {
     @Override
     public void settings() {
         super.settings();
-        size(WIDTH, HEIGHT);
+        size(Constants.WIDTH, Constants.HEIGHT);
     }
-
 
     @Override
-    public void draw() {
-        drawFourBallsWithVariableSpeed();
+    public void setup() {
+        balls = new Ball[numberOfBalls];
+        initializeFourBalls();
     }
 
-    private void drawFourBallsWithVariableSpeed() {
-        for (int ballIndex = startBallIndex; ballIndex <= numberOfBalls; ballIndex++) {
-            drawCircle(ballIndex);
+    private void initializeFourBalls() {
+        for (int index = 0; index < numberOfBalls; index++){
+            balls[index] = new Ball(this,index+START_BALL_INDEX);
         }
     }
 
-    private void drawCircle(int ballIndex) {
-        ellipse((float) (ballIndex *speedMultiplier*x), ballIndex *HEIGHT/5, DIAMETER, DIAMETER);
-        x++;
-    }
+    @Override
+    public void draw() {
 
-    private void drawCircle() {
-        ellipse(x, mouseY, DIAMETER, DIAMETER);
-        x++;
-    }
-
-    private void paintWhite() {
-        background(255);
+        for (Shape ball:balls){
+            ball.drawShape();
+        }
     }
 }
